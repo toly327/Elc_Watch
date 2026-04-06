@@ -16,23 +16,30 @@ bool OLED_ColorMode = true;
 
 void OLED_Write_DATA(uint8_t data)
 {
-    OLED_CS_Clr();    // 选中OLED
-	OLED_DC_Set();    // 设置数据命令线为数据模式
+    uint8_t i;
+    OLED_CS_Clr();    
+    OLED_DC_Set();   
     
 
-    for (uint8_t i = 0; i < 8; i++)
+    for (i = 0; i < 8; i++)
     {
-        OLED_D0_Clr();              // 时钟线置低，准备发送数据位
-        if (data & 0x80)             // 检查最高位
-            OLED_D1_Set();          // 如果是1，设置数据线高
+        
+       if (data & 0x80)             
+            OLED_D1_Set();          
         else
-            OLED_D1_Clr();          // 如果是0，设置数据线低
-				
-        OLED_D0_Set();              // 时钟线置高，数据线状态被读取
-        data <<= 1;                  // 左移数据准备下一位
-    }
-	
-    OLED_CS_Set();    // 取消选中OLED
+            OLED_D1_Clr();          
+                
+        
+        OLED_D0_Set();              
+        OLED_D0_Set();         //不要管为什么有两个     
+        
+        OLED_D0_Clr();              
+        
+       data <<= 1;                  
+        
+   }
+    
+    OLED_CS_Set();   
 }
 
 /**
@@ -62,23 +69,27 @@ void OLED_WriteDataArr(uint8_t *Data, uint8_t Count)
 
 void  OLED_Write_CMD(uint8_t data)
 {	
-			  
-	 
-	OLED_DC_Clr();		  
-	OLED_CS_Clr();
-	
-	for(uint8_t i = 0;i<8;i++)
-	{			  
-		OLED_D0_Clr();
-		if(data&0x80)
-		   OLED_D1_Set();
-		else 
-		   OLED_D1_Clr();
-		OLED_D0_Set();
-		data<<=1;   
-	}		
-	
-	OLED_CS_Set();   	  
+    uint8_t i;          
+     
+    OLED_DC_Clr();          
+    OLED_CS_Clr();
+    
+    for(i = 0;i<8;i++)
+    {              
+        if(data&0x80)
+           OLED_D1_Set();
+        else 
+           OLED_D1_Clr();
+        
+        OLED_D0_Set();
+        OLED_D0_Set();              
+        
+        OLED_D0_Clr();
+        
+        data<<=1;   
+    }        
+    
+    OLED_CS_Set();   	  
 }
 
 
